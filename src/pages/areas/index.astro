@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business } from '../../data/business';
+import { serviceAreas } from '../../data/serviceAreas';
+import { areaUrl, contactUrl } from '../../lib/urls';
+
+function priorityClasses(priority: string): string {
+  switch (priority) {
+    case 'primary': return 'bg-brand-100 text-brand-700';
+    case 'secondary': return 'bg-stone-200 text-stone-700';
+    case 'tertiary': return 'bg-stone-100 text-stone-500';
+    default: return 'bg-stone-100 text-stone-500';
+  }
+}
+
+function priorityLabel(priority: string): string {
+  switch (priority) {
+    case 'primary': return '주요 지역';
+    case 'secondary': return '서비스 지역';
+    case 'tertiary': return '출장 지역';
+    default: return '서비스 지역';
+  }
+}
+---
+
+<BaseLayout
+  title={`서비스 지역 | ${business.name}`}
+  description={`${business.name}의 전국 서비스 지역 안내. 서울, 경기, 인천, 부산, 대구, 광주, 대전, 울산 등 전국에 산업용 배터리 설치 서비스를 제공합니다.`}
+>
+  <Breadcrumbs crumbs={[{ label: '서비스 지역' }]} />
+
+  <section class="py-12 lg:py-16">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="max-w-3xl animate-fade-up">
+        <h1 class="font-display text-4xl text-brand-900 sm:text-5xl">
+          전국 서비스 지역
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-stone-600">
+          {business.name}은 전국 주요 도시에 산업용 배터리 설치 서비스를 제공합니다.
+          해당 지역 출신 전문 기사가 빠른 출동과 정확한 서비스를 보장합니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Google Map — nationwide overview -->
+  <section class="border-t border-stone-200/60 bg-stone-50 pb-12">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="overflow-hidden rounded-xl border border-stone-200 shadow-sm">
+        <iframe
+          title="밧데리몬스터 max 전국 서비스 지역 지도"
+          width="100%"
+          height="440"
+          style="border:0;"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyCjpq4ZJSQDZbDpz_oLz9zs1tRwac6xhWM&center=36.5,127.8&zoom=7&language=ko&region=KR`}
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-16 lg:pb-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {serviceAreas.map((area, i) => (
+          <a
+            href={areaUrl(area.slug)}
+            class={`card-hover group rounded-xl border border-stone-200 bg-white p-6 animate-fade-up stagger-${Math.min(i + 1, 6)}`}
+          >
+            <div class="flex items-center justify-between">
+              <h2 class="font-display text-lg text-brand-900">{area.name}</h2>
+              <span class={`inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold ${priorityClasses(area.priority)}`}>
+                {priorityLabel(area.priority)}
+              </span>
+            </div>
+            <p class="mt-1 text-sm text-stone-500">{area.county}</p>
+
+            <div class="mt-3 flex items-center gap-4 text-sm text-stone-600">
+              <span class="flex items-center gap-1.5">
+                <Icon name="lucide:users" class="size-4 text-stone-400" />
+                {area.population.toLocaleString()}명
+              </span>
+              <span class="flex items-center gap-1.5">
+                <Icon name="lucide:clock" class="size-4 text-brand-500" />
+                {area.responseTime}
+              </span>
+            </div>
+
+            <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-stone-500">
+              {area.description}
+            </p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-900">
+    <div class="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
+      <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div>
+          <h2 class="font-display text-3xl text-white">해당 지역이 없으신가요?</h2>
+          <p class="mt-2 text-brand-200">
+            전화로 문의해 주세요. 전국 어디든 출장 서비스가 가능합니다.
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-wrap gap-4">
+          <a
+            href={business.phoneHref}
+            class="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-6 py-3 text-sm font-semibold text-brand-950 shadow-lg transition-all hover:bg-amber-400"
+          >
+            <Icon name="lucide:phone" class="size-5" />
+            {business.phone}
+          </a>
+          <a
+            href={contactUrl()}
+            class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20"
+          >
+            문의하기
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

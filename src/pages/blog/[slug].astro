@@ -1,0 +1,156 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { blogUrl, contactUrl } from '../../lib/urls';
+import { business } from '../../data/business';
+import { Icon } from 'astro-icon/components';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const categoryColors: Record<string, { bg: string; text: string }> = {
+  emergency: { bg: 'bg-red-100', text: 'text-red-700' },
+  tips: { bg: 'bg-brand-100', text: 'text-brand-700' },
+  maintenance: { bg: 'bg-amber-100', text: 'text-amber-700' },
+  news: { bg: 'bg-stone-200', text: 'text-stone-700' },
+};
+
+const categoryLabels: Record<string, string> = {
+  emergency: '긴급',
+  tips: '팁',
+  maintenance: '유지보수',
+  news: '뉴스',
+};
+
+const colors = categoryColors[post.data.category] || categoryColors.news;
+const label = categoryLabels[post.data.category] || post.data.category;
+
+function formatDate(iso: string): string {
+  const date = new Date(iso + 'T00:00:00');
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate,
+  author: {
+    '@type': 'Organization',
+    name: post.data.author,
+    url: business.website,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: business.name,
+    url: business.website,
+    telephone: business.phone,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `${business.website}${blogUrl(post.id)}`,
+  },
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | ${business.name}`}
+  description={post.data.description}
+  canonicalUrl={`${business.website}${blogUrl(post.id)}`}
+  schema={schema}
+>
+  <Breadcrumbs
+    crumbs={[
+      { label: '블로그', href: '/blog/' },
+      { label: post.data.title },
+    ]}
+  />
+
+  <article class="mx-auto max-w-3xl px-5 py-10 lg:px-8 lg:py-16">
+    <header class="pb-8">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${colors.bg} ${colors.text}`}>
+          {label}
+        </span>
+        {post.data.readingTime && (
+          <span class="flex items-center gap-1 text-xs text-stone-400">
+            <Icon name="lucide:clock" class="size-3" />
+            {post.data.readingTime}
+          </span>
+        )}
+      </div>
+
+      <h1 class="mt-4 font-display text-3xl text-brand-900 sm:text-4xl">
+        {post.data.title}
+      </h1>
+
+      <div class="mt-4 flex items-center gap-3 text-sm text-stone-500">
+        <div class="flex items-center gap-1.5">
+          <Icon name="lucide:calendar" class="size-4" />
+          <time datetime={post.data.publishDate}>
+            {formatDate(post.data.publishDate)}
+          </time>
+        </div>
+        <span class="text-stone-300">|</span>
+        <div class="flex items-center gap-1.5">
+          <Icon name="lucide:user" class="size-4" />
+          <span>{post.data.author}</span>
+        </div>
+      </div>
+
+      {post.data.tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {post.data.tags.map((tag: string) => (
+            <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 text-xs text-stone-500">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose-editorial">
+      <Content />
+    </div>
+
+    <div class="mt-12 rounded-xl border border-brand-200 bg-brand-50 p-6 lg:p-8">
+      <h2 class="font-display text-xl text-brand-900">
+        배터리 교체 또는 설치가 필요하신가요?
+      </h2>
+      <p class="mt-2 text-sm text-stone-600">
+        산업용 배터리 관련 문의나 서비스 예약이 필요하시면 언제든지 연락해 주세요.
+        전국 어디든 빠르게 출동하겠습니다.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-4">
+        <a
+          href={business.phoneHref}
+          class="inline-flex items-center gap-2 rounded-lg bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-brand-800"
+        >
+          <Icon name="lucide:phone" class="size-4" />
+          {business.phone} 전화상담
+        </a>
+        <a
+          href={contactUrl()}
+          class="inline-flex items-center gap-2 rounded-lg border border-brand-300 bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
+        >
+          <Icon name="lucide:message-square" class="size-4" />
+          무료 견적 문의
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

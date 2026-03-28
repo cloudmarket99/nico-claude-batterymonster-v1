@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://batterymonstermax.co.kr/sitemap-index.xml

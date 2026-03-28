@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business, yearsInBusiness } from '../data/business';
+import { serviceAreas } from '../data/serviceAreas';
+import { areaUrl, contactUrl } from '../lib/urls';
+
+const years = yearsInBusiness();
+---
+
+<BaseLayout
+  title={`회사소개 | ${business.name}`}
+  description={`${business.name}은 ${business.yearEstablished}년 설립된 전국 산업용 배터리 설치 전문 기업입니다. ${years}년 이상의 경험과 전기공사업 면허를 보유하고 있습니다.`}
+>
+  <Breadcrumbs crumbs={[{ label: '회사소개' }]} />
+
+  <!-- ============ HEADER ============ -->
+  <section class="py-12 lg:py-16">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="max-w-3xl animate-fade-up">
+        <h1 class="font-display text-4xl text-brand-900 sm:text-5xl">
+          {business.name} 회사소개
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-stone-600">
+          {business.yearEstablished}년 설립 이후 {years}년간 전국 산업용 배터리 설치 전문 기업으로 성장해 왔습니다.
+          전기공사업 면허와 ISO 9001 인증을 보유한 믿을 수 있는 파트너입니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OUR STORY ============ -->
+  <section class="pb-16 lg:pb-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div class="prose-editorial">
+          <h2>회사 소개</h2>
+          <p>
+            {business.name}은 {business.yearEstablished}년 {business.owner}에 의해 설립된 전국 산업용 배터리 설치 전문 기업입니다.
+            설립 초기부터 한 가지 목표에 집중했습니다. 전국 어디서나 신속하고 안전한 산업용 배터리 서비스를 제공하는 것입니다.
+          </p>
+          <p>
+            소규모로 시작한 사업은 {years}년이 지난 지금 전국 규모의 배터리 전문 서비스 기업으로 성장했습니다.
+            지게차 배터리, UPS 배터리, 태양광 ESS, 비상발전기 배터리 등 모든 산업용 배터리 분야에서
+            풍부한 경험과 기술력을 축적했습니다.
+          </p>
+          <p>
+            저희는 단순히 배터리를 교체하는 것을 넘어, 고객의 생산성과 안전을 지키는 파트너가 되고자 합니다.
+            모든 작업을 전기공사업 면허 보유 전문 기사가 직접 수행하며, 6개월 무상 A/S로 설치 후에도 책임집니다.
+          </p>
+          <p>
+            전국 당일 출동 체계를 갖추고 있어 긴급 상황에서도 빠르게 대응합니다.
+            24시간 긴급 출동 서비스로 작업 중단 시간을 최소화하고 고객의 비즈니스가 멈추지 않도록 지원합니다.
+          </p>
+        </div>
+
+        <div>
+          <div class="rounded-xl border border-stone-200 bg-white p-8">
+            <div class="flex items-center gap-4">
+              <div class="flex size-16 items-center justify-center rounded-full bg-brand-100">
+                <Icon name="lucide:user" class="size-8 text-brand-700" />
+              </div>
+              <div>
+                <h3 class="font-display text-xl text-brand-900">{business.owner}</h3>
+                <p class="text-sm text-stone-500">대표이사 | 전기공사업 면허 보유</p>
+              </div>
+            </div>
+            <div class="mt-6 space-y-3 text-sm leading-relaxed text-stone-600">
+              <p>
+                {years}년간 산업용 배터리 분야에서 쌓은 경험과 노하우를 바탕으로 {business.name}을 운영하고 있습니다.
+                전기공사업 면허를 직접 보유하고 모든 프로젝트의 품질을 직접 관리합니다.
+              </p>
+              <p>
+                "고객의 현장이 멈추지 않도록"이라는 모토 아래 24시간 긴급 출동 체계를 유지하며,
+                전국 어디서나 빠르고 안전한 배터리 서비스를 제공하기 위해 최선을 다하고 있습니다.
+              </p>
+            </div>
+            <div class="mt-6 border-t border-stone-100 pt-6">
+              <p class="text-xs font-medium uppercase tracking-wider text-stone-400">인증 및 자격</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
+                  <Icon name="lucide:badge-check" class="size-3.5" />
+                  전기공사업 면허
+                </span>
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
+                  <Icon name="lucide:shield-check" class="size-3.5" />
+                  ISO 9001 인증
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRUST SIGNALS ============ -->
+  <section class="bg-stone-100 py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <h2 class="text-center font-display text-3xl text-brand-900">
+        고객이 신뢰하는 이유
+      </h2>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          {
+            icon: 'lucide:badge-check',
+            title: '전기공사업 면허',
+            detail: business.license,
+          },
+          {
+            icon: 'lucide:shield',
+            title: '완전 보험 가입',
+            detail: '모든 현장 작업에 배상 책임보험이 적용됩니다.',
+          },
+          {
+            icon: 'lucide:award',
+            title: 'ISO 9001 인증',
+            detail: '국제 품질경영 시스템 인증으로 체계적인 서비스 품질을 보증합니다.',
+          },
+          {
+            icon: 'lucide:calendar',
+            title: `${years}년 이상 경력`,
+            detail: `${business.yearEstablished}년 설립 이후 전국 산업용 배터리 설치 전문 기업으로 운영 중입니다.`,
+          },
+        ].map((item, i) => (
+          <div class={`rounded-xl border border-stone-200 bg-white p-6 animate-fade-up stagger-${i + 1}`}>
+            <div class="flex size-12 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+              <Icon name={item.icon} class="size-6" />
+            </div>
+            <h3 class="mt-4 font-display text-lg text-brand-900">{item.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-stone-600">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AREAS WE COVER ============ -->
+  <section class="py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <h2 class="text-center font-display text-3xl text-brand-900">
+        서비스 지역
+      </h2>
+      <p class="mx-auto mt-4 max-w-2xl text-center text-stone-600">
+        전국 모든 지역에 산업용 배터리 설치 서비스를 제공합니다.
+      </p>
+
+      <!-- Google Map -->
+      <div class="mt-10 overflow-hidden rounded-xl border border-stone-200 shadow-sm">
+        <iframe
+          title="밧데리몬스터 max 전국 서비스 지역"
+          width="100%"
+          height="400"
+          style="border:0;"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyCjpq4ZJSQDZbDpz_oLz9zs1tRwac6xhWM&center=${business.coordinates.lat},${business.coordinates.lng}&zoom=8&language=ko&region=KR`}
+        ></iframe>
+      </div>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {serviceAreas.map((area) => (
+          <a
+            href={areaUrl(area.slug)}
+            class="card-hover flex items-center gap-3 rounded-xl border border-stone-200 bg-white px-5 py-4 transition-colors"
+          >
+            <Icon name="lucide:map-pin" class="size-5 shrink-0 text-brand-600" />
+            <div>
+              <span class="font-medium text-brand-900">{area.name}</span>
+              <span class="block text-xs text-stone-500">{area.county}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="bg-brand-900">
+    <div class="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
+      <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div>
+          <h2 class="font-display text-3xl text-white">함께 시작하겠습니까?</h2>
+          <p class="mt-2 text-brand-200">
+            무료 견적 또는 서비스 문의를 남겨주세요. 빠르고 정확하게 답변해드립니다.
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-wrap gap-4">
+          <a
+            href={business.phoneHref}
+            class="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-6 py-3 text-sm font-semibold text-brand-950 shadow-lg transition-all hover:bg-amber-400"
+          >
+            <Icon name="lucide:phone" class="size-5" />
+            {business.phone}
+          </a>
+          <a
+            href={contactUrl()}
+            class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20"
+          >
+            무료 견적 문의
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

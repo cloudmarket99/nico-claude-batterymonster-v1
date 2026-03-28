@@ -1,0 +1,262 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business } from '../data/business';
+import { serviceTypes } from '../data/serviceTypes';
+import { serviceAreas } from '../data/serviceAreas';
+---
+
+<BaseLayout
+  title={`문의하기 | ${business.name}`}
+  description={`${business.name}에 문의하세요. ${business.phone} 또는 온라인 문의를 통해 무료 견적을 받아보세요. 전국 산업용 배터리 설치 전문.`}
+>
+  <Breadcrumbs crumbs={[{ label: '문의하기' }]} />
+
+  <section class="py-12 lg:py-16">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="max-w-3xl animate-fade-up">
+        <h1 class="font-display text-4xl text-brand-900 sm:text-5xl">
+          {business.name} 문의하기
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-stone-600">
+          배터리 교체나 설치가 필요하신가요? 전화, 이메일, 또는 아래 양식으로 문의해 주세요.
+          일반 문의는 영업일 기준 1일 이내 답변드립니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-16 lg:pb-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+        <!-- Left: Contact Form -->
+        <div class="lg:col-span-3">
+          <div class="rounded-xl border border-stone-200 bg-white p-6 sm:p-8">
+            <h2 class="font-display text-2xl text-brand-900">문의 양식</h2>
+            <p class="mt-2 text-sm text-stone-500">
+              양식을 작성해 주시면 빠르게 연락드리겠습니다.
+            </p>
+
+            <form action="#" method="POST" class="mt-8 space-y-6">
+              <div class="grid gap-6 sm:grid-cols-2">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-stone-700">
+                    성명 <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="홍길동"
+                    class="mt-1.5 w-full rounded-lg border border-stone-300 px-4 py-2.5 text-sm text-stone-900 placeholder-stone-400 transition-colors focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium text-stone-700">
+                    이메일 <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="example@company.com"
+                    class="mt-1.5 w-full rounded-lg border border-stone-300 px-4 py-2.5 text-sm text-stone-900 placeholder-stone-400 transition-colors focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="phone" class="block text-sm font-medium text-stone-700">
+                  연락처
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="010-1234-5678"
+                  class="mt-1.5 w-full rounded-lg border border-stone-300 px-4 py-2.5 text-sm text-stone-900 placeholder-stone-400 transition-colors focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                />
+              </div>
+
+              <div class="grid gap-6 sm:grid-cols-2">
+                <div>
+                  <label for="service" class="block text-sm font-medium text-stone-700">
+                    필요한 서비스
+                  </label>
+                  <select
+                    id="service"
+                    name="service"
+                    class="mt-1.5 w-full rounded-lg border border-stone-300 bg-white px-4 py-2.5 text-sm text-stone-900 transition-colors focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  >
+                    <option value="">서비스를 선택하세요</option>
+                    {serviceTypes.map((service) => (
+                      <option value={service.slug}>{service.name}</option>
+                    ))}
+                    <option value="other">기타 / 잘 모르겠음</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="area" class="block text-sm font-medium text-stone-700">
+                    지역
+                  </label>
+                  <select
+                    id="area"
+                    name="area"
+                    class="mt-1.5 w-full rounded-lg border border-stone-300 bg-white px-4 py-2.5 text-sm text-stone-900 transition-colors focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  >
+                    <option value="">지역을 선택하세요</option>
+                    {serviceAreas.map((area) => (
+                      <option value={area.slug}>{area.name} ({area.county})</option>
+                    ))}
+                    <option value="other">기타 지역</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="message" class="block text-sm font-medium text-stone-700">
+                  문의 내용 <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows="5"
+                  placeholder="배터리 종류, 모델명, 증상 등을 자세히 적어주세요..."
+                  class="mt-1.5 w-full rounded-lg border border-stone-300 px-4 py-2.5 text-sm text-stone-900 placeholder-stone-400 transition-colors focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-800 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md sm:w-auto"
+              >
+                <Icon name="lucide:send" class="size-4" />
+                문의 보내기
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Contact Info Card -->
+        <div class="lg:col-span-2">
+          <div class="rounded-xl border border-stone-200 bg-white p-6 sm:p-8">
+            <h2 class="font-display text-2xl text-brand-900">연락처 정보</h2>
+
+            <ul class="mt-6 space-y-5">
+              <li class="flex items-start gap-3">
+                <div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50">
+                  <Icon name="lucide:phone" class="size-5 text-brand-700" />
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-stone-700">전화</p>
+                  <a href={business.phoneHref} class="text-sm text-brand-700 transition-colors hover:text-brand-900">
+                    {business.phone}
+                  </a>
+                </div>
+              </li>
+
+              <li class="flex items-start gap-3">
+                <div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50">
+                  <Icon name="lucide:mail" class="size-5 text-brand-700" />
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-stone-700">이메일</p>
+                  <a href={`mailto:${business.email}`} class="text-sm text-brand-700 transition-colors hover:text-brand-900">
+                    {business.email}
+                  </a>
+                </div>
+              </li>
+
+              <li class="flex items-start gap-3">
+                <div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50">
+                  <Icon name="lucide:map-pin" class="size-5 text-brand-700" />
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-stone-700">위치</p>
+                  <p class="text-sm text-stone-600">
+                    {business.address.city}, {business.address.state}
+                  </p>
+                </div>
+              </li>
+
+              <li class="flex items-start gap-3">
+                <div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50">
+                  <Icon name="lucide:clock" class="size-5 text-brand-700" />
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-stone-700">영업시간</p>
+                  <div class="mt-1 space-y-0.5 text-sm text-stone-600">
+                    {business.hours.map((schedule) => (
+                      <p>
+                        <span class="font-medium">{schedule.days}:</span> {schedule.hours}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+            <div class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <div class="flex items-start gap-3">
+                <Icon name="lucide:alert-triangle" class="mt-0.5 size-5 shrink-0 text-amber-600" />
+                <div>
+                  <p class="text-sm font-semibold text-amber-800">긴급 배터리 교체가 필요하신가요?</p>
+                  <p class="mt-1 text-sm text-amber-700">
+                    지게차 배터리 방전, UPS 배터리 불량, 비상발전기 불시동 등 긴급 상황 발생 시
+                    즉시
+                    <a href={business.phoneHref} class="font-semibold underline">
+                      {business.phone}
+                    </a>
+                    으로 연락주세요. 24시간 긴급 출동 서비스를 운영합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Google Maps Section -->
+  <section class="border-t border-stone-200/60 bg-stone-50 py-16">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="mb-8">
+        <h2 class="font-display text-2xl text-brand-900 sm:text-3xl">서비스 지역 안내</h2>
+        <p class="mt-3 text-stone-600">
+          서울을 중심으로 전국 주요 산업 단지에 빠른 출동 서비스를 제공합니다.
+        </p>
+      </div>
+
+      <div class="overflow-hidden rounded-xl border border-stone-200 shadow-sm">
+        <iframe
+          title="밧데리몬스터 max 서비스 지역 지도"
+          width="100%"
+          height="480"
+          style="border:0;"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyCjpq4ZJSQDZbDpz_oLz9zs1tRwac6xhWM&center=${business.coordinates.lat},${business.coordinates.lng}&zoom=10&language=ko&region=KR`}
+        ></iframe>
+      </div>
+
+      <!-- Service area chips -->
+      <div class="mt-6 flex flex-wrap gap-2">
+        {serviceAreas.map((area) => (
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-medium text-brand-800">
+            <Icon name="lucide:map-pin" class="size-3.5 text-brand-500" />
+            {area.name}
+          </span>
+        ))}
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-stone-200 bg-white px-3 py-1.5 text-sm font-medium text-stone-600">
+          + 전국 출동 가능
+        </span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
