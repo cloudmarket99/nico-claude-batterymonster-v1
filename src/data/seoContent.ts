@@ -18,7 +18,7 @@ export interface Review {
 // Local constants (duplicated from business.ts to avoid circular imports)
 const BUSINESS_NAME = '밧데리몬스터 max';
 const OWNER_NAME = '대표 김철수';
-const PHONE = '1588-0000';
+const PHONE = '010-3700-3859';
 const LICENSE = '전기공사업 면허 보유 | ISO 9001 인증';
 const YEAR_ESTABLISHED = 2010;
 

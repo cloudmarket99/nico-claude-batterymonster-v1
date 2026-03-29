@@ -4,8 +4,11 @@ import { Icon } from 'astro-icon/components';
 import { business, yearsInBusiness } from '../data/business';
 import { serviceTypes } from '../data/serviceTypes';
 import { serviceAreas } from '../data/serviceAreas';
-import { serviceUrl, areaUrl, contactUrl } from '../lib/urls';
+import { serviceUrl, areaUrl, contactUrl, casesUrl } from '../lib/urls';
 import { reviews } from '../data/seoContent';
+import { cases } from '../data/cases';
+
+const latestCases = cases.slice(0, 3);
 
 const years = yearsInBusiness();
 
@@ -36,8 +39,10 @@ const schema = {
       foundingDate: `${business.yearEstablished}`,
       address: {
         '@type': 'PostalAddress',
+        streetAddress: business.address.street,
         addressLocality: business.address.city,
         addressRegion: business.address.state,
+        postalCode: business.address.zip,
         addressCountry: 'KR',
       },
       geo: {
@@ -185,6 +190,69 @@ const schema = {
             <p class="mt-3 text-sm font-semibold text-brand-700">
               {service.priceRange.min.toLocaleString()}원부터
             </p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RECENT CASES ============ -->
+  <section class="bg-stone-50 py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="flex flex-col items-end justify-between gap-4 sm:flex-row sm:items-center">
+        <div class="max-w-xl">
+          <h2 class="font-display text-3xl text-brand-900 sm:text-4xl">
+            최신 시공 사례
+          </h2>
+          <p class="mt-4 text-stone-600">
+            현장별 맞춤 솔루션으로 완벽하게 시공된 최신 배터리 설치 사례를 확인해보세요.
+          </p>
+        </div>
+        <a 
+          href="/cases/"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-900"
+        >
+          시공사례 전체보기
+          <Icon name="lucide:arrow-right" class="size-4" />
+        </a>
+      </div>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {latestCases.map((item, i) => (
+          <a
+            href={casesUrl(item.slug)}
+            class={`group overflow-hidden rounded-xl border border-stone-200 bg-white transition-all hover:shadow-xl animate-fade-up stagger-${i + 1}`}
+          >
+            <div class="aspect-[16/10] overflow-hidden">
+              <img
+                src={item.thumbnail}
+                alt={item.title}
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                width="800"
+                height="500"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-6">
+              <div class="mb-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-[11px] font-semibold text-brand-700">
+                  {item.category}
+                </span>
+                <span class="inline-flex items-center rounded-full bg-stone-100 px-2.5 py-0.5 text-[11px] font-medium text-stone-600">
+                  {item.location}
+                </span>
+              </div>
+              <h3 class="font-display text-lg leading-tight text-brand-900 group-hover:text-brand-700">
+                {item.title}
+              </h3>
+              <div class="mt-4 flex items-center justify-between border-t border-stone-100 pt-4">
+                <span class="text-xs font-medium text-stone-400">{item.model}</span>
+                <span class="inline-flex items-center gap-1 text-xs font-bold text-brand-600">
+                  자세히 보기
+                  <Icon name="lucide:chevron-right" class="size-3" />
+                </span>
+              </div>
+            </div>
           </a>
         ))}
       </div>

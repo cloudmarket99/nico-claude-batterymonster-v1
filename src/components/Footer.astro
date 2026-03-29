@@ -38,6 +38,11 @@ import { serviceUrl, areaUrl } from '../lib/urls';
               </a>
             </li>
           ))}
+          <li>
+            <a href="/cases/" class="text-sm font-medium text-brand-400 transition-colors hover:text-white">
+              시공사례 전체보기
+            </a>
+          </li>
         </ul>
       </div>
 
@@ -60,7 +65,7 @@ import { serviceUrl, areaUrl } from '../lib/urls';
           <li class="flex items-start gap-2.5">
             <Icon name="lucide:map-pin" class="mt-0.5 size-4 shrink-0 text-stone-500" />
             <span class="text-sm text-stone-400">
-              {business.address.city}, {business.address.state}
+              {business.address.state} {business.address.city} {business.address.street}
             </span>
           </li>
           <li class="flex items-start gap-2.5">

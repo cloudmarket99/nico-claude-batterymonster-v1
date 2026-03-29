@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business } from '../../data/business';
+import { cases, caseUrl } from '../../data/cases';
+
+export function getStaticPaths() {
+  return cases.map((c) => ({
+    params: { slug: c.slug },
+    props: { caseItem: c },
+  }));
+}
+
+const { caseItem } = Astro.props;
+
+// 관련 사례 (같은 카테고리, 현재 제외, 최대 3개)
+const related = cases
+  .filter((c) => c.category === caseItem.category && c.slug !== caseItem.slug)
+  .slice(0, 3);
+
+const categoryColors: Record<string, { bg: string; text: string }> = {
+  'UPS 배터리': { bg: 'bg-brand-100', text: 'text-brand-700' },
+  '아파트 배터리': { bg: 'bg-amber-100', text: 'text-amber-700' },
+  '의료시설 배터리': { bg: 'bg-red-100', text: 'text-red-700' },
+  '공공시설 배터리': { bg: 'bg-green-100', text: 'text-green-700' },
+  '산업단지 배터리': { bg: 'bg-orange-100', text: 'text-orange-700' },
+  '오피스텔 배터리': { bg: 'bg-purple-100', text: 'text-purple-700' },
+};
+
+const color = categoryColors[caseItem.category] || { bg: 'bg-stone-100', text: 'text-stone-600' };
+---
+
+<BaseLayout
+  title={`${caseItem.title} | 시공사례 | ${business.name}`}
+  description={caseItem.description}
+>
+  <Breadcrumbs
+    crumbs={[
+      { label: '시공사례', href: '/cases/' },
+      { label: caseItem.title },
+    ]}
+  />
+
+  <article class="mx-auto max-w-4xl px-5 py-12 lg:px-8 lg:py-20">
+    <!-- Header -->
+    <div class="mb-8">
+      <span class={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${color.bg} ${color.text}`}>
+        {caseItem.category}
+      </span>
+      <h1 class="mt-4 font-display text-2xl leading-snug text-brand-900 sm:text-3xl lg:text-4xl">
+        {caseItem.title}
+      </h1>
+      <div class="mt-4 flex flex-wrap gap-4 text-sm text-stone-500">
+        <span class="flex items-center gap-1.5">
+          <Icon name="lucide:map-pin" class="size-4 text-brand-500" />
+          {caseItem.location}
+        </span>
+        <span class="flex items-center gap-1.5">
+          <Icon name="lucide:battery-charging" class="size-4 text-brand-500" />
+          {caseItem.batteryModel}
+        </span>
+      </div>
+    </div>
+
+    <!-- Main Image -->
+    <div class="overflow-hidden rounded-2xl border border-stone-200 bg-stone-100">
+      <img
+        src={caseItem.image}
+        alt={caseItem.title}
+        class="w-full object-cover"
+        width="800"
+        height="520"
+        loading="eager"
+      />
+    </div>
+
+    <!-- Content -->
+    <div class="mt-10 grid gap-8 lg:grid-cols-3">
+      <!-- Description + Details -->
+      <div class="lg:col-span-2 space-y-8">
+        <div>
+          <h2 class="font-display text-xl text-brand-900">시공 개요</h2>
+          <p class="mt-3 leading-relaxed text-stone-600">
+            {caseItem.description}
+          </p>
+        </div>
+
+        <div>
+          <h2 class="font-display text-xl text-brand-900">시공 작업 내용</h2>
+          <ul class="mt-4 space-y-3">
+            {caseItem.details.map((detail, i) => (
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">
+                  {i + 1}
+                </span>
+                <span class="text-stone-600">{detail}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rounded-xl border border-brand-100 bg-brand-50 p-6">
+          <div class="flex items-start gap-3">
+            <Icon name="lucide:shield-check" class="mt-0.5 size-5 shrink-0 text-brand-700" />
+            <div>
+              <p class="font-semibold text-brand-900">전기공사업 면허 보유 전문 기사 작업</p>
+              <p class="mt-1 text-sm text-brand-700">
+                모든 시공은 전기공사업 면허를 보유한 전문 기사가 직접 현장에서 안전 기준에 따라 진행합니다.
+                설치 후 6개월 무상 A/S를 제공합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <!-- Specs Card -->
+        <div class="rounded-xl border border-stone-200 bg-white p-6">
+          <h3 class="font-display text-lg text-brand-900">시공 사양</h3>
+          <dl class="mt-4 space-y-3">
+            <div>
+              <dt class="text-xs font-semibold uppercase tracking-wider text-stone-400">시공 지역</dt>
+              <dd class="mt-1 text-sm text-stone-700">{caseItem.location}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold uppercase tracking-wider text-stone-400">설치 배터리</dt>
+              <dd class="mt-1 text-sm font-semibold text-brand-700">{caseItem.batteryModel}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold uppercase tracking-wider text-stone-400">분류</dt>
+              <dd class="mt-1">
+                <span class={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${color.bg} ${color.text}`}>
+                  {caseItem.category}
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- CTA Card -->
+        <div class="rounded-xl bg-brand-900 p-6 text-white">
+          <h3 class="font-display text-lg">유사 시공 문의</h3>
+          <p class="mt-2 text-sm text-brand-300">
+            비슷한 환경의 배터리 교체·설치가 필요하신가요? 전문가에게 바로 문의하세요.
+          </p>
+          <div class="mt-5 flex flex-col gap-3">
+            <a
+              href={business.phoneHref}
+              class="flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-brand-950 transition-all hover:bg-amber-400"
+            >
+              <Icon name="lucide:phone" class="size-4" />
+              {business.phone}
+            </a>
+            <a
+              href="/contact/"
+              class="flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-white/20"
+            >
+              온라인 문의
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Cases -->
+    {related.length > 0 && (
+      <div class="mt-16 border-t border-stone-200 pt-12">
+        <h2 class="font-display text-2xl text-brand-900">관련 시공사례</h2>
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((item) => {
+            const rc = categoryColors[item.category] || { bg: 'bg-stone-100', text: 'text-stone-600' };
+            return (
+              <a
+                href={caseUrl(item.slug)}
+                class="card-hover group overflow-hidden rounded-xl border border-stone-200 bg-white"
+              >
+                <div class="aspect-[3/2] overflow-hidden bg-stone-100">
+                  <img
+                    src={item.thumb}
+                    alt={item.title}
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                    width="400"
+                    height="260"
+                  />
+                </div>
+                <div class="p-4">
+                  <span class={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${rc.bg} ${rc.text}`}>
+                    {item.category}
+                  </span>
+                  <p class="mt-2 line-clamp-2 text-sm font-semibold leading-snug text-stone-800 group-hover:text-brand-700">
+                    {item.title}
+                  </p>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    )}
+  </article>
+</BaseLayout>

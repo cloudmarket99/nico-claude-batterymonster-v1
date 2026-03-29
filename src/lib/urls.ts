@@ -5,3 +5,4 @@ export const comboUrl = (areaSlug: string, serviceSlug: string) =>
 export const contactUrl = () => '/contact/';
 export const aboutUrl = () => '/about/';
 export const blogUrl = (slug?: string) => (slug ? `/blog/${slug}/` : '/blog/');
+export const casesUrl = (slug?: string) => (slug ? `/cases/${slug}/` : '/cases/');

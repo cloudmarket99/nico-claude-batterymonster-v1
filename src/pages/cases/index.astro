@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+import { business } from '../../data/business';
+import { cases, caseUrl } from '../../data/cases';
+
+const categoryColors: Record<string, { bg: string; text: string }> = {
+  'UPS 배터리': { bg: 'bg-brand-100', text: 'text-brand-700' },
+  '아파트 배터리': { bg: 'bg-amber-100', text: 'text-amber-700' },
+  '의료시설 배터리': { bg: 'bg-red-100', text: 'text-red-700' },
+  '공공시설 배터리': { bg: 'bg-green-100', text: 'text-green-700' },
+  '산업단지 배터리': { bg: 'bg-orange-100', text: 'text-orange-700' },
+  '오피스텔 배터리': { bg: 'bg-purple-100', text: 'text-purple-700' },
+};
+
+const categories = Array.from(new Set(cases.map(c => c.category)));
+---
+
+<BaseLayout
+  title={`시공사례 | ${business.name}`}
+  description="밧데리몬스터 max의 실제 산업용 배터리 설치·교체 시공사례. 기업은행, 병원, 아파트, 산업단지 등 전국 다양한 현장의 시공 이력을 확인하세요."
+>
+  <Breadcrumbs crumbs={[{ label: '시공사례' }]} />
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-brand-900 to-brand-800 py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="text-center">
+        <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-brand-800/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-300">
+          <Icon name="lucide:image" class="size-3.5" />
+          실제 시공 현장
+        </div>
+        <h1 class="font-display text-4xl text-white sm:text-5xl">
+          시공사례
+        </h1>
+        <p class="mx-auto mt-4 max-w-2xl text-brand-200">
+          기업은행, 병원, 아파트, 공공기관, 산업단지 등 전국 다양한 현장에서
+          진행한 실제 산업용 배터리 설치·교체 시공 이력입니다.
+        </p>
+        <div class="mt-6 flex flex-wrap justify-center gap-2">
+          <span class="rounded-full bg-brand-800/50 px-3 py-1 text-xs text-brand-300">
+            총 {cases.length}건 시공 완료
+          </span>
+          {categories.map(cat => {
+            const color = categoryColors[cat] || { bg: 'bg-stone-100', text: 'text-stone-600' };
+            return (
+              <span class={`rounded-full px-3 py-1 text-xs font-medium ${color.bg} ${color.text}`}>
+                {cat}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid -->
+  <section class="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {cases.map((item, i) => {
+        const color = categoryColors[item.category] || { bg: 'bg-stone-100', text: 'text-stone-600' };
+        return (
+          <a
+            href={caseUrl(item.slug)}
+            class={`card-hover group overflow-hidden rounded-xl border border-stone-200 bg-white animate-fade-up stagger-${Math.min(i + 1, 6)}`}
+          >
+            <div class="aspect-[3/2] overflow-hidden bg-stone-100">
+              <img
+                src={item.thumb}
+                alt={item.title}
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+                width="400"
+                height="260"
+              />
+            </div>
+            <div class="p-5">
+              <div class="flex items-center gap-2">
+                <span class={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${color.bg} ${color.text}`}>
+                  {item.category}
+                </span>
+              </div>
+              <h2 class="mt-3 line-clamp-2 text-sm font-semibold leading-snug text-stone-800 group-hover:text-brand-700">
+                {item.title}
+              </h2>
+              <div class="mt-3 flex items-center gap-3 text-xs text-stone-400">
+                <span class="flex items-center gap-1">
+                  <Icon name="lucide:map-pin" class="size-3.5" />
+                  {item.location}
+                </span>
+              </div>
+              <div class="mt-3 flex items-center gap-1 text-xs font-medium text-brand-700">
+                <Icon name="lucide:battery-charging" class="size-3.5" />
+                {item.batteryModel}
+              </div>
+              <div class="mt-4 flex items-center gap-1 border-t border-stone-100 pt-3 text-xs text-brand-600 group-hover:text-brand-800">
+                <span>상세 보기</span>
+                <Icon name="lucide:arrow-right" class="size-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-brand-900">
+    <div class="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
+      <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div>
+          <h2 class="font-display text-2xl text-white sm:text-3xl">시공 문의하기</h2>
+          <p class="mt-2 text-brand-200">
+            위 사례처럼 전문 기사가 직접 방문해 안전하게 설치해드립니다. 지금 바로 문의하세요.
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-wrap gap-4">
+          <a
+            href={business.phoneHref}
+            class="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-6 py-3 text-sm font-semibold text-brand-950 shadow-lg transition-all hover:bg-amber-400"
+          >
+            <Icon name="lucide:phone" class="size-5" />
+            {business.phone}
+          </a>
+          <a
+            href="/contact/"
+            class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20"
+          >
+            무료 견적 문의
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

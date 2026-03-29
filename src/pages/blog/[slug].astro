@@ -49,6 +49,7 @@ const schema = {
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.publishDate,
+  image: post.data.image ? [`${business.website}${post.data.image}`] : [],
   author: {
     '@type': 'Organization',
     name: post.data.author,
@@ -122,6 +123,18 @@ const schema = {
         </div>
       )}
     </header>
+
+    {post.data.image && (
+      <div class="mb-10 overflow-hidden rounded-2xl bg-stone-100">
+        <img
+          src={post.data.image}
+          alt={post.data.title}
+          class="aspect-video w-full object-cover"
+          width="1200"
+          height="675"
+        />
+      </div>
+    )}
 
     <div class="prose-editorial">
       <Content />
